@@ -9,10 +9,12 @@ export function parseArgs(): ParsedArgs {
     contract: process.env.DEPLOY_CONTRACT || null,
     network: process.env.DEPLOY_NETWORK || null,
     params: {
-      name: process.env.TOKEN_NAME || undefined,
-      symbol: process.env.TOKEN_SYMBOL || undefined,
+      name: process.env.TOKEN_NAME || process.env.NFT_NAME || undefined,
+      symbol: process.env.TOKEN_SYMBOL || process.env.NFT_SYMBOL || undefined,
       unlockTime: process.env.UNLOCK_TIME ? parseInt(process.env.UNLOCK_TIME) : undefined,
       lockedAmount: process.env.LOCKED_AMOUNT || undefined,
+      tokenAddress: process.env.PAYMENT_TOKEN_ADDRESS || undefined,
+      price: process.env.NFT_PRICE || undefined,
     },
   };
 
@@ -32,6 +34,10 @@ export function parseArgs(): ParsedArgs {
       parsed.params.unlockTime = parseInt(args[++i]);
     } else if (arg === "--locked-amount") {
       parsed.params.lockedAmount = args[++i];
+    } else if (arg === "--token-address") {
+      parsed.params.tokenAddress = args[++i];
+    } else if (arg === "--price") {
+      parsed.params.price = args[++i];
     } else if (arg === "--help" || arg === "-h") {
       printUsage();
       process.exit(0);
@@ -47,7 +53,7 @@ Usage: npx hardhat run scripts/deploy.ts [OPTIONS] --network <network>
 
 Options:
   --contract, -c <name>        Contract name to deploy (required)
-                               Available: PaymentToken, Lock
+                               Available: PaymentToken, Lock, NFT
   
   --network, -n <network>      Network to deploy to (optional, defaults to hardhat)
                                Available: hardhat, localhost, sepolia, etc.
@@ -64,6 +70,13 @@ Contract-specific parameters:
     --locked-amount <amount>   Amount of ETH to lock (optional, defaults to 0.001 ETH)
                                Format: "0.001" or "1.5"
 
+  NFT:
+    --token-address <address>  Payment token contract address (required for NFT)
+    --price <amount>           Price per NFT in payment token units (required for NFT)
+                               Format: "10" (for 10 tokens) or wei amount
+    --name <string>            NFT collection name (required for NFT)
+    --symbol <string>          NFT collection symbol (required for NFT)
+
 Examples:
   # Deploy PaymentToken to hardhat network
   npx hardhat run scripts/deploy.ts --contract PaymentToken --name "My Token" --symbol "MTK"
@@ -76,6 +89,9 @@ Examples:
 
   # Deploy Lock with custom amount
   npx hardhat run scripts/deploy.ts --contract Lock --unlock-time 3600 --locked-amount "0.1" --network sepolia
+
+  # Deploy NFT contract
+  npx hardhat run scripts/deploy.ts --contract NFT --token-address 0x... --price "10" --name "My NFT" --symbol "MNFT" --network sepolia
 `);
 }
 

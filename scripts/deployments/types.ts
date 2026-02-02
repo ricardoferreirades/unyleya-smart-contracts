@@ -3,6 +3,8 @@ export interface DeploymentParams {
   symbol?: string;
   unlockTime?: number;
   lockedAmount?: string;
+  tokenAddress?: string;
+  price?: string;
 }
 
 export interface ParsedArgs {

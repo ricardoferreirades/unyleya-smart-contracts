@@ -12,8 +12,10 @@
     "deploy": "hardhat run scripts/deploy.ts",
     "deploy:payment-token": "DEPLOY_CONTRACT=PaymentToken hardhat run scripts/deploy-payment-token.ts",
     "deploy:lock": "DEPLOY_CONTRACT=Lock hardhat run scripts/deploy-lock.ts",
+    "deploy:nft": "DEPLOY_CONTRACT=NFT hardhat run scripts/deploy-nft.ts",
     "verify": "hardhat run scripts/verify.ts",
-    "interact": "npx hardhat run scripts/interact.js --network sepolia"
+    "interact": "npx hardhat run scripts/interact.js --network sepolia",
+    "check:images": "node scripts/check-image-uniqueness.js"
   },
   "keywords": [
     "hardhat",
