@@ -1,0 +1,21 @@
+{
+  "name": "NFT #1",
+  "description": "This is the first NFT in the collection",
+  "image": "ipfs://QmExampleHashHere/1.png",
+  "external_url": "https://example.com/nft/1",
+  "attributes": [
+    {
+      "trait_type": "Rarity",
+      "value": "Common"
+    },
+    {
+      "trait_type": "Color",
+      "value": "Blue"
+    },
+    {
+      "trait_type": "Level",
+      "value": 1
+    }
+  ]
+}
+
