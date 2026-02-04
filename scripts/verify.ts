@@ -1,18 +1,29 @@
 import hre from "hardhat";
 
 async function main() {
-  // Get contract address and constructor arguments from command line
-  const contractAddress = process.argv[2];
-  const constructorArgs = process.argv.slice(3);
+  // Get contract address and constructor arguments from environment variables or command line
+  // Hardhat v2 doesn't allow positional args after --network, so we use env vars
+  const contractAddress = process.env.CONTRACT_ADDRESS || process.argv[2];
+  const constructorArgsEnv = process.env.CONSTRUCTOR_ARGS 
+    ? process.env.CONSTRUCTOR_ARGS.split(',').map(arg => arg.trim())
+    : [];
+  const constructorArgs = constructorArgsEnv.length > 0 
+    ? constructorArgsEnv 
+    : process.argv.slice(3);
 
   if (!contractAddress) {
     console.error("❌ Error: Contract address is required");
-    console.log("\nUsage: npx hardhat run scripts/verify.ts --network <network> <CONTRACT_ADDRESS> [constructor args...]");
+    console.log("\nUsage (Method 1 - Environment Variables):");
+    console.log("  CONTRACT_ADDRESS=0x... CONSTRUCTOR_ARGS=\"arg1,arg2,arg3\" npx hardhat run scripts/verify.ts --network sepolia");
+    console.log("\nUsage (Method 2 - Direct Hardhat Command - Recommended):");
+    console.log("  npx hardhat verify --network sepolia <CONTRACT_ADDRESS> <arg1> <arg2> <arg3>");
     console.log("\nExamples:");
     console.log("  # Verify PaymentToken:");
-    console.log("  npx hardhat run scripts/verify.ts --network sepolia 0x... \"Token Name\" \"SYMBOL\"");
+    console.log("  npx hardhat verify --network sepolia 0x... \"Token Name\" \"SYMBOL\"");
+    console.log("\n  # Verify NFT:");
+    console.log("  npx hardhat verify --network sepolia 0x... \"0xPAYMENT_TOKEN\" \"10000000000000000000\" \"NFT Name\" \"SYMBOL\"");
     console.log("\n  # Verify Lock:");
-    console.log("  npx hardhat run scripts/verify.ts --network sepolia 0x... 1234567890");
+    console.log("  npx hardhat verify --network sepolia 0x... 1234567890");
     process.exit(1);
   }
 
