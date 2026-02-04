@@ -13,7 +13,10 @@ export async function deployPaymentToken(
   console.log(`Name: ${params.name}`);
   console.log(`Symbol: ${params.symbol}\n`);
 
-  const paymentToken = await hre.ethers.deployContract("PaymentToken", [
+  // Access ethers through type assertion (Hardhat v2 with @nomicfoundation/hardhat-ethers)
+  const ethers = (hre as any).ethers;
+
+  const paymentToken = await ethers.deployContract("PaymentToken", [
     params.name,
     params.symbol,
   ]);

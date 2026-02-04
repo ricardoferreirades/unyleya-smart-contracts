@@ -99,7 +99,10 @@ import { HardhatRuntimeEnvironment } from "hardhat/types";
 
 export async function validateNetwork(hre: HardhatRuntimeEnvironment): Promise<void> {
   const network = hre.network.name;
-  const networkConfig = hre.network.config;
+  const networkConfig = hre.network.config as any; // Type assertion for network config
+  
+  // Access ethers through type assertion (Hardhat v2 with @nomicfoundation/hardhat-ethers)
+  const ethers = (hre as any).ethers;
   
   if (network !== "hardhat" && network !== "localhost") {
     if (!networkConfig.url || networkConfig.url === "") {
@@ -109,7 +112,11 @@ export async function validateNetwork(hre: HardhatRuntimeEnvironment): Promise<v
       );
     }
     
-    if (!networkConfig.accounts || networkConfig.accounts.length === 0) {
+    const accounts = Array.isArray(networkConfig.accounts) 
+      ? networkConfig.accounts 
+      : (networkConfig.accounts?.length ? [networkConfig.accounts] : []);
+    
+    if (!accounts || accounts.length === 0) {
       throw new Error(
         `❌ Error: ${network.toUpperCase()}_PRIVATE_KEY is not set or invalid in your .env file.\n` +
         `Please add a valid private key (64 hex characters) to your .env file.`
@@ -118,11 +125,11 @@ export async function validateNetwork(hre: HardhatRuntimeEnvironment): Promise<v
     
     console.log(`\n📡 Connecting to ${network} network...`);
     console.log(`🔗 RPC URL: ${networkConfig.url.substring(0, 30)}...`);
-    const signers = await hre.ethers.getSigners();
+    const signers = await ethers.getSigners();
     console.log(`👤 Deployer: ${signers[0].address}\n`);
   } else {
     console.log(`\n📡 Using ${network} network...`);
-    const signers = await hre.ethers.getSigners();
+    const signers = await ethers.getSigners();
     console.log(`👤 Deployer: ${signers[0].address}\n`);
   }
 }

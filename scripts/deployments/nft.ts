@@ -17,17 +17,20 @@ export async function deployNFT(
   console.log(`Name: ${params.name}`);
   console.log(`Symbol: ${params.symbol}\n`);
 
+  // Access ethers through type assertion (Hardhat v2 with @nomicfoundation/hardhat-ethers)
+  const ethers = (hre as any).ethers;
+
   // Parse price - handle both wei and ether format
   let priceInWei: bigint;
   try {
     // Try parsing as ether first (e.g., "10" = 10 tokens)
-    priceInWei = hre.ethers.parseEther(params.price);
+    priceInWei = ethers.parseEther(params.price);
   } catch {
     // If that fails, try parsing as wei
     priceInWei = BigInt(params.price);
   }
 
-  const nft = await hre.ethers.deployContract("NFT", [
+  const nft = await ethers.deployContract("NFT", [
     params.tokenAddress,
     priceInWei,
     params.name,

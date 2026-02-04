@@ -23,16 +23,19 @@ export async function deployLock(
     throw new Error("❌ Error: Unlock time must be in the future");
   }
 
+  // Access ethers through type assertion (Hardhat v2 with @nomicfoundation/hardhat-ethers)
+  const ethers = (hre as any).ethers;
+
   const lockedAmount = params.lockedAmount 
-    ? hre.ethers.parseEther(params.lockedAmount)
-    : hre.ethers.parseEther("0.001");
+    ? ethers.parseEther(params.lockedAmount)
+    : ethers.parseEther("0.001");
 
   console.log("🚀 Deploying Lock contract...\n");
   console.log(`Unlock Time: ${new Date(unlockTime * 1000).toISOString()}`);
   console.log(`Unlock Timestamp: ${unlockTime}`);
-  console.log(`Locked Amount: ${hre.ethers.formatEther(lockedAmount)} ETH\n`);
+  console.log(`Locked Amount: ${ethers.formatEther(lockedAmount)} ETH\n`);
 
-  const lock = await hre.ethers.deployContract("Lock", [unlockTime], {
+  const lock = await ethers.deployContract("Lock", [unlockTime], {
     value: lockedAmount,
   });
 
@@ -43,7 +46,7 @@ export async function deployLock(
   console.log(`Contract: Lock`);
   console.log(`Address: ${lockAddress}`);
   console.log(`Network: ${hre.network.name}`);
-  console.log(`Locked Amount: ${hre.ethers.formatEther(lockedAmount)} ETH`);
+  console.log(`Locked Amount: ${ethers.formatEther(lockedAmount)} ETH`);
   console.log(`Unlock Timestamp: ${unlockTime}`);
   console.log(`Unlock Date: ${new Date(unlockTime * 1000).toISOString()}`);
   console.log("==================================\n");
