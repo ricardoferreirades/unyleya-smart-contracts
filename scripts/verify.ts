@@ -22,8 +22,6 @@ async function main() {
     console.log("  npx hardhat verify --network sepolia 0x... \"Token Name\" \"SYMBOL\"");
     console.log("\n  # Verify NFT:");
     console.log("  npx hardhat verify --network sepolia 0x... \"0xPAYMENT_TOKEN\" \"10000000000000000000\" \"NFT Name\" \"SYMBOL\"");
-    console.log("\n  # Verify Lock:");
-    console.log("  npx hardhat verify --network sepolia 0x... 1234567890");
     process.exit(1);
   }
 

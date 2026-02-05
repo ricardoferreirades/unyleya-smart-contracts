@@ -1,7 +1,6 @@
 import hre from "hardhat";
 import { parseArgs, printUsage, validateNetwork } from "./deployments/utils";
 import { deployPaymentToken } from "./deployments/paymentToken";
-import { deployLock } from "./deployments/lock";
 import { deployNFT } from "./deployments/nft";
 
 async function main() {
@@ -14,7 +13,7 @@ async function main() {
     process.exit(1);
   }
 
-  const validContracts = ["PaymentToken", "Lock", "NFT"];
+  const validContracts = ["PaymentToken", "NFT"];
   if (!validContracts.includes(args.contract)) {
     console.error(`❌ Error: Invalid contract name "${args.contract}"`);
     console.error(`Available contracts: ${validContracts.join(", ")}`);
@@ -30,9 +29,6 @@ async function main() {
     switch (args.contract) {
       case "PaymentToken":
         deployedAddress = await deployPaymentToken(hre, args.params);
-        break;
-      case "Lock":
-        deployedAddress = await deployLock(hre, args.params);
         break;
       case "NFT":
         deployedAddress = await deployNFT(hre, args.params);

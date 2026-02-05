@@ -1,8 +1,6 @@
 export interface DeploymentParams {
   name?: string;
   symbol?: string;
-  unlockTime?: number;
-  lockedAmount?: string;
   tokenAddress?: string;
   price?: string;
 }
