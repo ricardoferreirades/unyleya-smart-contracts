@@ -101,10 +101,10 @@ After deploying a contract, you can verify it on Etherscan:
 npx hardhat verify --network <network-name> <CONTRACT_ADDRESS> <CONSTRUCTOR_ARGUMENTS>
 ```
 
-Example for the Lock contract:
+Example for the PaymentToken contract:
 
 ```bash
-npx hardhat verify --network goerli 0x1234567890123456789012345678901234567890 1234567890
+npx hardhat verify --network sepolia 0x1234567890123456789012345678901234567890 "Token Name" "SYMBOL"
 ```
 
 The Etherscan API key is configured in `hardhat.config.js` and loaded from your `.env` file.
